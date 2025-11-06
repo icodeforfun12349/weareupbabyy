@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Velocity & Work.Ink Troubleshooting Guide</title>
+    <title>Velocity & Work.Ink - Complete Guide</title>
     <style>
         * {
             margin: 0;
@@ -11,91 +11,143 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary: #8b5cf6;
+            --primary-dark: #7c3aed;
+            --primary-light: #a78bfa;
+            --accent: #ec4899;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --bg-dark: #0a0a0f;
+            --bg-card: #15151f;
+            --bg-card-hover: #1a1a2a;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border: rgba(139, 92, 246, 0.2);
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 30%, #16213e 70%, #0f0f23 100%);
-            min-height: 100vh;
-            color: #e2e8f0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            line-height: 1.6;
             overflow-x: hidden;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* Welcome Screen */
-        .welcome-screen {
+        /* Animated Background */
+        .bg-animation {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 50%, #2d1b69 100%);
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        .bg-animation::before,
+        .bg-animation::after {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            filter: blur(80px);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .bg-animation::before {
+            background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+            top: -200px;
+            left: -200px;
+            animation-delay: 0s;
+        }
+
+        .bg-animation::after {
+            background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+            bottom: -200px;
+            right: -200px;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(100px, -100px) scale(1.1); }
+            50% { transform: translate(-50px, 100px) scale(0.9); }
+            75% { transform: translate(-100px, -50px) scale(1.05); }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            z-index: 1000;
-            animation: welcomeFade 0.5s ease-in-out;
+            padding: 2rem;
+            position: relative;
         }
 
-        .welcome-screen.hide {
-            animation: welcomeOut 1s ease-in-out forwards;
+        .hero-content {
+            text-align: center;
+            max-width: 900px;
+            animation: fadeInUp 0.8s ease;
         }
 
-        @keyframes welcomeFade {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes welcomeOut {
-            to { 
+        @keyframes fadeInUp {
+            from {
                 opacity: 0;
-                transform: translateY(-50px);
-                visibility: hidden;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
-        .welcome-logo {
-            font-size: 4rem;
-            background: linear-gradient(135deg, #a855f7, #c084fc, #e879f9);
+        .hero-icon {
+            font-size: 6rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #a78bfa, #ec4899, #8b5cf6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
-            animation: logoGlow 2s ease-in-out infinite alternate;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
         }
 
-        @keyframes logoGlow {
-            from { filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.5)); }
-            to { filter: drop-shadow(0 0 40px rgba(168, 85, 247, 0.8)); }
+        .hero p {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            color: var(--text-muted);
+            margin-bottom: 3rem;
         }
 
-        .welcome-text {
-            font-size: 1.5rem;
-            color: #cbd5e1;
-            text-align: center;
-            margin-bottom: 30px;
-            opacity: 0.9;
-        }
-
-        .enter-btn {
-            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+        .cta-button {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
             color: white;
             border: none;
-            padding: 15px 40px;
-            border-radius: 50px;
-            cursor: pointer;
+            padding: 1.25rem 3rem;
             font-size: 1.1rem;
             font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 8px 32px rgba(139, 92, 246, 0.3);
+            box-shadow: 0 10px 40px rgba(139, 92, 246, 0.3);
             position: relative;
             overflow: hidden;
         }
 
-        .enter-btn::before {
+        .cta-button::before {
             content: '';
             position: absolute;
             top: 0;
@@ -106,963 +158,1182 @@
             transition: left 0.5s;
         }
 
-        .enter-btn:hover {
+        .cta-button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 12px 40px rgba(139, 92, 246, 0.4);
+            box-shadow: 0 15px 50px rgba(139, 92, 246, 0.4);
         }
 
-        .enter-btn:hover::before {
+        .cta-button:hover::before {
             left: 100%;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
         }
 
         /* Main Content */
-        .main-content {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 1s ease;
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
         }
 
-        .main-content.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .header {
+        .section-header {
             text-align: center;
-            background: rgba(15, 15, 30, 0.95);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            border-radius: 25px;
-            padding: 40px;
-            margin-bottom: 40px;
-            box-shadow: 0 25px 50px rgba(139, 92, 246, 0.1);
-            position: relative;
-            overflow: hidden;
+            margin-bottom: 4rem;
         }
 
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
-            animation: headerGlow 4s ease-in-out infinite alternate;
-        }
-
-        @keyframes headerGlow {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(180deg); }
-        }
-
-        .header h1 {
-            font-size: 3rem;
-            background: linear-gradient(135deg, #a855f7, #c084fc, #e879f9);
+        .section-header h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 15px;
-            position: relative;
-            z-index: 1;
         }
 
-        .header p {
-            color: #cbd5e1;
+        .section-header p {
             font-size: 1.2rem;
-            position: relative;
-            z-index: 1;
+            color: var(--text-muted);
         }
 
-        .nav {
+        /* Category Cards Grid */
+        .category-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 25px;
-            margin-bottom: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
         }
 
-        .nav-card {
-            background: rgba(20, 20, 40, 0.95);
-            border: 1px solid rgba(139, 92, 246, 0.3);
+        .category-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
             border-radius: 20px;
-            padding: 30px;
-            text-align: center;
+            padding: 2rem;
             cursor: pointer;
-            transition: all 0.4s ease;
-            box-shadow: 0 15px 35px rgba(139, 92, 246, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
 
-        .nav-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.2), transparent);
-            transition: left 0.6s ease;
-        }
-
-        .nav-card::after {
+        .category-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at center, rgba(139, 92, 246, 0.1), transparent);
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(236, 72, 153, 0.1));
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.4s ease;
         }
 
-        .nav-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 25px 60px rgba(139, 92, 246, 0.25);
-            border-color: rgba(139, 92, 246, 0.6);
+        .category-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 60px rgba(139, 92, 246, 0.3);
         }
 
-        .nav-card:hover::before {
-            left: 100%;
-        }
-
-        .nav-card:hover::after {
+        .category-card:hover::before {
             opacity: 1;
         }
 
-        .nav-card h3 {
-            color: #a855f7;
-            margin-bottom: 15px;
-            font-size: 1.4rem;
+        .category-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
             position: relative;
             z-index: 1;
         }
 
-        .nav-card p {
-            color: #94a3b8;
-            font-size: 1rem;
-            line-height: 1.6;
+        .category-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text);
             position: relative;
             z-index: 1;
         }
 
-        .section {
-            background: rgba(15, 15, 30, 0.95);
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 30px;
-            box-shadow: 0 15px 35px rgba(139, 92, 246, 0.1);
+        .category-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .category-card .arrow {
+            position: absolute;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            font-size: 1.5rem;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.4s ease;
+        }
+
+        .category-card:hover .arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Problem Cards */
+        .problems-section {
             display: none;
         }
 
-        .section.active {
+        .problems-section.active {
             display: block;
-            animation: sectionFadeIn 0.6s ease-in-out;
+            animation: fadeInUp 0.6s ease;
         }
 
-        @keyframes sectionFadeIn {
-            from { 
-                opacity: 0; 
-                transform: translateY(30px); 
-            }
-            to { 
-                opacity: 1; 
-                transform: translateY(0); 
-            }
+        .back-nav {
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
-        .section h2 {
-            color: #a855f7;
-            font-size: 2.2rem;
-            margin-bottom: 25px;
-            border-bottom: 3px solid #8b5cf6;
-            padding-bottom: 15px;
-            position: relative;
-        }
-
-        .section h2::after {
-            content: '';
-            position: absolute;
-            bottom: -3px;
-            left: 0;
-            width: 60px;
-            height: 3px;
-            background: linear-gradient(90deg, #a855f7, #c084fc);
-        }
-
-        .problem {
-            background: rgba(10, 10, 25, 0.8);
-            border-left: 4px solid #8b5cf6;
-            border: 1px solid rgba(139, 92, 246, 0.25);
-            padding: 25px;
-            margin: 25px 0;
+        .back-button {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.75rem 1.5rem;
             border-radius: 12px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-button:hover {
+            border-color: var(--primary);
+            transform: translateX(-5px);
+        }
+
+        .problem-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
             transition: all 0.3s ease;
         }
 
-        .problem:hover {
-            border-color: rgba(139, 92, 246, 0.4);
-            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.1);
+        .problem-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.2);
         }
 
-        .problem h3 {
-            color: #e2e8f0;
-            margin-bottom: 20px;
-            font-size: 1.3rem;
+        .problem-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+        }
+
+        .problem-icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .problem-title {
+            flex: 1;
+        }
+
+        .problem-title h3 {
+            font-size: 1.4rem;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .problem-title .subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .toggle-icon {
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+            color: var(--primary);
+        }
+
+        .problem-card.expanded .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .problem-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .problem-card.expanded .problem-content {
+            max-height: 3000px;
+        }
+
+        .solution-box {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-box h4 {
+            color: var(--success);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
             display: flex;
             align-items: center;
-            gap: 10px;
-        }
-
-        .solution {
-            background: rgba(5, 20, 5, 0.6);
-            border: 1px solid rgba(34, 197, 94, 0.3);
-            padding: 20px;
-            border-radius: 12px;
-            margin: 15px 0;
-        }
-
-        .solution h4 {
-            color: #22c55e;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
+            gap: 0.5rem;
         }
 
         .step-list {
             list-style: none;
-            counter-reset: step-counter;
+            counter-reset: step;
         }
 
         .step-list li {
-            counter-increment: step-counter;
-            margin: 20px 0;
-            padding-left: 45px;
+            counter-increment: step;
             position: relative;
-            line-height: 1.7;
-            color: #cbd5e1;
+            padding-left: 3rem;
+            margin: 1.5rem 0;
+            line-height: 1.8;
         }
 
         .step-list li::before {
-            content: counter(step-counter);
+            content: counter(step);
             position: absolute;
             left: 0;
             top: 0;
-            background: linear-gradient(135deg, #8b5cf6, #a855f7);
-            color: white;
-            width: 28px;
-            height: 28px;
+            width: 2rem;
+            height: 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.85rem;
-            font-weight: bold;
-            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+            font-weight: 700;
+            font-size: 0.9rem;
         }
 
-        .warning {
-            background: rgba(45, 35, 0, 0.6);
-            border: 1px solid rgba(245, 158, 11, 0.4);
-            color: #fbbf24;
-            padding: 20px;
+        .warning-box {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
             border-radius: 12px;
-            margin: 20px 0;
-            position: relative;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            display: flex;
+            gap: 1rem;
         }
 
-        .warning::before {
-            content: '⚠️';
-            font-size: 1.2rem;
-            margin-right: 10px;
+        .warning-box .icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .code-block {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+            color: var(--primary-light);
+            position: relative;
+            overflow-x: auto;
         }
 
         .link {
-            color: #a855f7;
+            color: var(--primary-light);
             text-decoration: none;
             font-weight: 500;
+            border-bottom: 1px solid transparent;
             transition: all 0.2s ease;
-            position: relative;
-        }
-
-        .link::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #a855f7, #c084fc);
-            transition: width 0.3s ease;
         }
 
         .link:hover {
-            color: #c084fc;
+            color: var(--accent);
+            border-bottom-color: var(--accent);
         }
 
-        .link:hover::after {
-            width: 100%;
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
         }
 
-        .code {
-            background: rgba(15, 15, 25, 0.9);
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            color: #e2e8f0;
-            padding: 12px 18px;
-            border-radius: 8px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            margin: 12px 0;
-            display: inline-block;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .folder-structure {
-            background: rgba(15, 15, 25, 0.9);
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            padding: 25px;
+        .download-card {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
             border-radius: 12px;
-            font-family: 'Courier New', monospace;
-            color: #cbd5e1;
-            line-height: 1.8;
-            margin: 20px 0;
-            box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
-        }
-
-        .folder-structure .folder {
-            color: #fbbf24;
-        }
-
-        .folder-structure .file {
-            color: #22c55e;
-        }
-
-        .back-btn {
-            background: linear-gradient(135deg, #8b5cf6, #a855f7);
-            color: white;
-            border: none;
-            padding: 14px 28px;
-            border-radius: 12px;
-            cursor: pointer;
-            margin-bottom: 25px;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            font-size: 1rem;
-            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .back-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.4s;
-        }
-
-        .back-btn:hover {
-            background: linear-gradient(135deg, #7c3aed, #9333ea);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
-        }
-
-        .back-btn:hover::before {
-            left: 100%;
-        }
-
-        .footer {
+            padding: 1.5rem;
             text-align: center;
-            padding: 40px;
-            color: #cbd5e1;
-            background: rgba(10, 10, 20, 0.9);
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            border-radius: 20px;
-            margin-top: 40px;
-            position: relative;
-            overflow: hidden;
+            transition: all 0.3s ease;
         }
 
-        .footer::before {
-            content: '';
+        .download-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .download-card strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        /* Search */
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 1rem 3rem 1rem 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            color: var(--text);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+
+        .search-icon {
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #a855f7, transparent);
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-top: 4rem;
         }
 
         .footer h3 {
-            background: linear-gradient(135deg, #a855f7, #c084fc);
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
         }
 
-        .download-links {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
+        .footer p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
         }
 
-        .download-link {
-            background: rgba(20, 20, 40, 0.8);
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            padding: 15px 20px;
-            border-radius: 10px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .download-link:hover {
-            border-color: rgba(139, 92, 246, 0.5);
-            transform: translateY(-2px);
-        }
-
+        /* Responsive */
         @media (max-width: 768px) {
-            .welcome-logo {
-                font-size: 3rem;
-            }
-            
-            .header h1 {
-                font-size: 2.2rem;
-            }
-            
-            .nav {
-                grid-template-columns: 1fr;
-            }
-            
-            .container {
-                padding: 15px;
+            .hero h1 {
+                font-size: 2.5rem;
             }
 
-            .download-links {
+            .category-grid {
                 grid-template-columns: 1fr;
             }
+
+            .problem-header {
+                flex-direction: column;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+        }
+
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
         }
     </style>
 </head>
 <body>
-    <!-- Welcome Screen -->
-    <div class="welcome-screen" id="welcomeScreen">
-        <div class="welcome-logo">🚀⚡</div>
-        <h1 class="welcome-text">Velocity & Work.Ink Troubleshooting Guide</h1>
-        <p style="color: #94a3b8; margin-bottom: 30px;">Your complete solution center</p>
-        <button class="enter-btn" onclick="enterSite()">Enter Guide</button>
-    </div>
+    <div class="bg-animation"></div>
 
-    <!-- Main Content -->
-    <div class="container main-content" id="mainContent">
-        <div class="header">
-            <h1>🚀 Velocity & Work.Ink Troubleshooting Guide</h1>
-            <p>Complete solutions for common issues with Velocity executor and Work.Ink website</p>
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <div class="hero-icon">🚀⚡</div>
+            <h1>Velocity & Work.Ink</h1>
+            <p>Complete troubleshooting guide with solutions that actually work</p>
+            <button class="cta-button" onclick="scrollToGuide()">Explore Solutions</button>
+        </div>
+        <div class="scroll-indicator">↓</div>
+    </section>
+
+    <!-- Main Guide -->
+    <main class="container" id="guide">
+        <div class="section-header">
+            <h2>What do you need help with?</h2>
+            <p>Select a category to find solutions</p>
         </div>
 
-        <div id="main-menu" class="nav">
-            <div class="nav-card" onclick="showSection('workink')">
-                <h3>🌐 Work.Ink Issues</h3>
-                <p>Fix website access, download problems, blocked countries, and navigation issues with comprehensive solutions</p>
+        <div class="search-container">
+            <input type="text" class="search-box" placeholder="Search for issues..." id="searchBox">
+            <span class="search-icon">🔍</span>
+        </div>
+
+        <!-- Category Selection -->
+        <div class="category-grid" id="categoryGrid">
+            <div class="category-card" onclick="showCategory('workink')">
+                <span class="category-icon">🌐</span>
+                <h3>Work.Ink Issues</h3>
+                <p>Website access, downloads, blocked countries, and navigation problems</p>
+                <span class="arrow">→</span>
             </div>
-            <div class="nav-card" onclick="showSection('velocity')">
-                <h3>⚡ Velocity Executor</h3>
-                <p>Resolve injection failures, crashes, UI problems, and black screen issues with step-by-step fixes</p>
+
+            <div class="category-card" onclick="showCategory('velocity')">
+                <span class="category-icon">⚡</span>
+                <h3>Velocity Executor</h3>
+                <p>Injection failures, crashes, UI problems, and black screen fixes</p>
+                <span class="arrow">→</span>
             </div>
-            <div class="nav-card" onclick="showSection('roblox')">
-                <h3>🎮 Roblox Issues</h3>
-                <p>Fix Roblox crashes, clear corrupted cache, resolve compatibility problems and crash dump analysis</p>
+
+            <div class="category-card" onclick="showCategory('roblox')">
+                <span class="category-icon">🎮</span>
+                <h3>Roblox Issues</h3>
+                <p>Game crashes, cache clearing, and compatibility problems</p>
+                <span class="arrow">→</span>
             </div>
-            <div class="nav-card" onclick="showSection('dependencies')">
-                <h3>📦 Dependencies & Setup</h3>
-                <p>Install required components, fix missing files, proper antivirus configuration and complete setup guide</p>
+
+            <div class="category-card" onclick="showCategory('dependencies')">
+                <span class="category-icon">📦</span>
+                <h3>Setup & Dependencies</h3>
+                <p>Required components, installation, and configuration</p>
+                <span class="arrow">→</span>
             </div>
         </div>
 
-        <!-- Work.Ink Section -->
-        <div id="workink" class="section">
-            <button class="back-btn" onclick="showMainMenu()">← Back to Menu</button>
-            <h2>🌐 Work.Ink Website Issues</h2>
-            
-            <div class="problem">
-                <h3>🔄 Opera Installers Being Downloaded</h3>
-                <div class="solution">
-                    <h4>Solution:</h4>
-                    <p>This is just an advertisement. Simply keep clicking the download button and follow the instructions provided by the ad to proceed to the actual download.</p>
+        <!-- Work.Ink Problems -->
+        <div class="problems-section" id="workink">
+            <div class="back-nav">
+                <button class="back-button" onclick="backToCategories()">← Back</button>
+                <h2>🌐 Work.Ink Website Issues</h2>
+            </div>
+
+            <div class="problem-card" onclick="toggleProblem(this)">
+                <div class="problem-header">
+                    <span class="problem-icon">🔄</span>
+                    <div class="problem-title">
+                        <h3>Opera Installers Downloading</h3>
+                        <p class="subtitle">Getting unwanted Opera installer files</p>
+                    </div>
+                    <span class="toggle-icon">▼</span>
                 </div>
-            </div>
-
-            <div class="problem">
-                <h3>🚫 Blocked Country Access</h3>
-                <div class="solution">
-                    <h4>DNS Method:</h4>
-                    <ol class="step-list">
-                        <li>Set your DNS to either:
-                            <div class="code">1.1.1.1 (Cloudflare DNS)</div>
-                            <div class="code">8.8.8.8 (Google DNS)</div>
-                        </li>
-                        <li>Cloudflare DNS Setup: <a href="https://developers.cloudflare.com/1.1.1.1/setup/windows/" class="link" target="_blank">Windows Setup Guide</a></li>
-                        <li>Google DNS Setup: <a href="https://developers.google.com/speed/public-dns/docs/using" class="link" target="_blank">Configuration Guide</a></li>
-                        <li>Restart your network adapter or reboot your computer</li>
-                        <li>Clear browser cache and try accessing Work.Ink again</li>
-                    </ol>
-                    <div class="warning">
-                        <strong>Note:</strong> If DNS changes don't resolve the issue, create a support ticket explaining your specific problem and location.
+                <div class="problem-content">
+                    <div class="solution-box">
+                        <h4>✓ Solution</h4>
+                        <p>This is just an advertisement redirect. Keep clicking the download button and follow the ad instructions to reach the actual Velocity download. It's a normal part of the process.</p>
                     </div>
                 </div>
             </div>
 
-            <div class="problem">
-                <h3>❌ "Go to Destination" Button Missing</h3>
-                <div class="solution">
-                    <h4>Browser Settings Fix:</h4>
-                    <ol class="step-list">
-                        <li>Turn off popup blockers in your browser settings</li>
-                        <li>Disable any active ad blockers (uBlock Origin, AdBlock Plus, etc.)</li>
-                        <li>Whitelist Work.Ink in your browser extensions</li>
-                        <li>Clear browser cache and cookies</li>
-                        <li>Refresh the page and try again</li>
-                    </ol>
-                </div>
-            </div>
-
-            <div class="problem">
-                <h3>🔍 Error 404 - Page Not Found</h3>
-                <div class="solution">
-                    <h4>Network & Connection Fix:</h4>
-                    <ol class="step-list">
-                        <li>Turn off any active VPNs completely</li>
-                        <li>Disable proxy connections in browser settings</li>
-                        <li>Clear browser cache, cookies, and browsing data</li>
-                        <li>Try accessing from a different network (mobile hotspot)</li>
-                        <li>Flush DNS cache: Open CMD as admin, type <span class="code">ipconfig /flushdns</span></li>
-                        <li>Restart your router/modem</li>
-                    </ol>
-                </div>
-            </div>
-
-            <div class="problem">
-                <h3>🔄 Opera Continuously Downloading at Final Page</h3>
-                <div class="solution">
-                    <h4>Complete Browser Fix:</h4>
-                    <ol class="step-list">
-                        <li>Turn off all VPNs and proxy connections</li>
-                        <li>Disable ad blockers completely</li>
-                        <li>Switch to Google Chrome browser (recommended)</li>
-                        <li>Try using incognito/private browsing mode</li>
-                        <li>Clear all browser data (cache, cookies, history)</li>
-                        <li>Disable browser extensions temporarily</li>
-                        <li>Try different browser entirely (Firefox, Edge)</li>
-                    </ol>
-                    <div class="warning">
-                        <strong>Final Step:</strong> After completing these steps, you'll be redirected to a GoFile link. Download the <code>net8.0-windows.7z</code> file from there.
+            <div class="problem-card" onclick="toggleProblem(this)">
+                <div class="problem-header">
+                    <span class="problem-icon">🚫</span>
+                    <div class="problem-title">
+                        <h3>Blocked Country Access</h3>
+                        <p class="subtitle">Work.Ink not accessible in your region</p>
                     </div>
+                    <span class="toggle-icon">▼</span>
                 </div>
-            </div>
-        </div>
-
-        <!-- Velocity Section -->
-        <div id="velocity" class="section">
-            <button class="back-btn" onclick="showMainMenu()">← Back to Menu</button>
-            <h2>⚡ Velocity Executor Issues</h2>
-
-            <div class="problem">
-                <h3>💥 Roblox Crashing on Injection</h3>
-                <div class="solution">
-                    <h4>Try Alternative Roblox Versions:</h4>
-                    <ol class="step-list">
-                        <li>Use <strong>Bloxstrap</strong> - Set channel to LIVE/Production in settings</li>
-                        <li>Use <strong>Fishstrap</strong> - Set deployment channel to LIVE</li>
-                        <li>Use standard Roblox from <a href="https://www.roblox.com/download" class="link" target="_blank">official website</a></li>
-                        <li>Download specific working build: <a href="https://rdd.weao.xyz/?channel=LIVE&binaryType=WindowsPlayer&version=version-2a06298afe3947ab" class="link" target="_blank">WEAO Roblox Player</a></li>
-                        <li>Make sure Roblox is fully loaded into a game before injecting</li>
-                    </ol>
-                </div>
-            </div>
-
-            <div class="problem">
-                <h3>📜 Scripts Not Executing</h3>
-                <div class="solution">
-                    <h4>UI & Script Fix:</h4>
-                    <ol class="step-list">
-                        <li>Open a new tab in the Velocity UI</li>
-                        <li>Try executing scripts in the new tab</li>
-                        <li>Test with simple scripts like Infinite Yield first</li>
-                        <li>Check if it's a script-specific problem</li>
-                        <li>Ensure VelocityAPI.dll is in the same folder as Velocity.exe</li>
-                        <li>Try restarting Velocity and Roblox</li>
-                    </ol>
-                </div>
-            </div>
-
-            <div class="problem">
-                <h3>🖥️ UI Not Opening / Missing Files</h3>
-                <div class="solution">
-                    <h4>Required Files Check:</h4>
-                    <p>Ensure these files are in your Bin folder:</p>
-                    <ol class="step-list">
-                        <li><code>Workspace</code> (folder)</li>
-                        <li><code>Bin</code> (Critical!)</li>
-                        <li><code>Velocity</code></li>
-                        <li><code>VelocityAPI.dll</code></li>
-                        <li><code>Runtimes</code></li>
-                        <li><code>assets</code></li>
-                    </ol>
-                    <div class="warning">
-                        <strong>Important:</strong> If files are missing, your antivirus likely deleted them. Turn off antivirus, re-extract Velocity, and add an exclusion for the entire folder.
-                    </div>
-                </div>
-            </div>
-
-            <div class="problem">
-                <h3>⚫ Black Screen on Injection</h3>
-                <div class="solution">
-                    <h4>OpenGL & Optimization Fix:</h4>
-                    <ol class="step-list">
-                        <li>Install OpenGL drivers: <a href="https://www.majorgeeks.com/files/details/glsetup.html" class="link" target="_blank">GLSetup Download</a></li>
-                        <li>Disable full-screen optimizations for Roblox:
-                            <ul style="margin-top: 10px; color: #94a3b8;">
-                                <li>Right-click RobloxPlayerBeta.exe → Properties</li>
-                                <li>Go to Compatibility tab</li>
-                                <li>Check "Disable fullscreen optimizations"</li>
-                                <li>Apply and restart Roblox</li>
-                            </ul>
-                        </li>
-                        <li>Video tutorial: <a href="https://www.youtube.com/watch?v=TqCfBjOjZiI" class="link" target="_blank">How to Disable Full-Screen Optimizations</a></li>
-                    </ol>
-                </div>
-            </div>
-
-            <div class="problem">
-                <h3>💻 Complete Velocity Setup Checklist</h3>
-                <div class="solution">
-                    <h4>Essential Requirements (Follow in Order):</h4>
-                    <ol class="step-list">
-                        <li><strong>Roblox Version:</strong> Latest desktop version (NOT Microsoft Store version)</li>
-                        <li><strong>Required Build:</strong> version-7b14ca0aa83149fa or newer</li>
-                        <li><strong>Admin Rights:</strong> Run both Roblox and Velocity as administrator</li>
-                        <li><strong>Windows Security:</strong> Turn off real-time protection, add Velocity folder to exclusions</li>
-                        <li><strong>Dependencies:</strong> Install Visual C++ Redistributables (2015-2022), .NET Framework 4.8+</li>
-                        <li><strong>Disable Features:</strong> Core Isolation, Memory Integrity, third-party antivirus scanning</li>
-                        <li><strong>Overlays:</strong> Disable Discord overlay, MSI Afterburner, GeForce Experience overlays</li>
-                        <li><strong>File Check:</strong> Ensure VelocityAPI.dll is in same folder as Velocity.exe</li>
-                        <li><strong>Final Step:</strong> Restart PC after all changes</li>
-                    </ol>
-                </div>
-            </div>
-        </div>
-
-        <!-- Roblox Section -->
-        <div id="roblox" class="section">
-            <button class="back-btn" onclick="showMainMenu()">← Back to Menu</button>
-            <h2>🎮 Roblox-Specific Fixes</h2>
-
-            <div class="problem">
-                <h3>🗑️ Clear Roblox Cache & Corrupted Files</h3>
-                <div class="solution">
-                    <h4>Complete AppData Cleanup:</h4>
-                    <ol class="step-list">
-                        <li>Press <span class="code">Win + R</span>, type <span class="code">%LocalAppData%\Roblox</span> and hit Enter</li>
-                        <li>Delete the <strong>Versions</strong> folder completely</li>
-                        <li>Delete the <strong>Downloads</strong> folder (in Roblox folder, NOT your main Downloads)</li>
-                        <li>Delete the <strong>ClientSettings</strong> folder</li>
-                        <li>Delete the <strong>LocalStorage</strong> folder if present</li>
-                    </ol>
-
-                    <h4>Temp Cache Cleanup:</h4>
-                    <ol class="step-list">
-                        <li>Press <span class="code">Win + R</span>, type <span class="code">%Temp%\Roblox</span> and hit Enter</li>
-                        <li>Press <span class="code">Ctrl + A</span> to select all files</li>
-                        <li>Delete everything in the folder</li>
-                        <li>Empty your Recycle Bin</li>
-                    </ol>
-
-                    <div class="warning">
-                        <strong>Important:</strong> After clearing cache, download and use ONLY regular Roblox from <a href="https://www.roblox.com/download" class="link" target="_blank">roblox.com/download</a> - NOT the Microsoft Store version!
-                    </div>
-                </div>
-            </div>
-
-            <div class="problem">
-                <h3>📊 Crash Dump Analysis for Persistent Issues</h3>
-                <div class="solution">
-                    <h4>If Roblox Still Crashes After All Fixes:</h4>
-                    <ol class="step-list">
-                        <li>Press <span class="code">Win + R</span>, type <span class="code">%localappdata%</span> and hit Enter</li>
-                        <li>Locate and open the <strong>CrashDumps</strong> folder</li>
-                        <li>Find the most recent crash dump files:
-                            <ul style="margin-top: 15px; color: #94a3b8;">
-                                <li><code>Velocity.exe.dmp</code> (Velocity crash dump)</li>
-                                <li><code>RobloxPlayerBeta.exe.dmp</code> (Roblox crash dump)</li>
-                            </ul>
-                        </li>
-                        <li>Share these files when creating a support ticket for detailed analysis</li>
-                        <li>Include your system specs and exact error messages</li>
-                    </ol>
-                </div>
-            </div>
-
-            <div class="problem">
-                <h3>🔧 Complete Roblox Reinstall (Nuclear Option)</h3>
-                <div class="solution">
-                    <h4>Remove All Roblox-Related Files:</h4>
-                    <ol class="step-list">
-                        <li>Press <span class="code">Win + R</span>, type <span class="code">%localappdata%</span> and hit Enter</li>
-                        <li>Look for and completely delete these folders:
-                            <ul style="margin-top: 15px; color: #94a3b8;">
-                                <li><strong>Roblox</strong> (main folder)</li>
-                                <li><strong>Bloxstrap</strong> (if using Bloxstrap)</li>
-                                <li><strong>Fishstrap</strong> (if using Fishstrap)</li>
-                            </ul>
-                        </li>
-                        <li>Go to Control Panel → Programs → Uninstall Roblox</li>
-                        <li>Clear browser cache and cookies</li>
-                        <li>Restart your computer completely</li>
-                        <li>Download fresh Roblox from <a href="https://www.roblox.com/download" class="link" target="_blank">official website</a></li>
-                        <li>Install as administrator</li>
-                    </ol>
-                </div>
-            </div>
-
-            <div class="problem">
-                <h3>🔄 Alternative Roblox Clients Setup</h3>
-                <div class="solution">
-                    <h4>Option 1: WEAO Roblox (Recommended)</h4>
-                    <ol class="step-list">
-                        <li>Go to <a href="https://rdd.weao.xyz" class="link" target="_blank">rdd.weao.xyz</a></li>
-                        <li>Click "Download Latest Version"</li>
-                        <li>Extract the downloaded folder</li>
-                        <li>Use the RobloxPlayerBeta.exe as your primary Roblox client</li>
-                    </ol>
-
-                    <h4>Option 2: Fishstrap Setup</h4>
-                    <ol class="step-list">
-                        <li>Download Fishstrap (may prompt for .NET 6.0 Desktop Runtime)</li>
-                        <li>Install .NET 6.0 if prompted: <a href="https://dotnet.microsoft.com/en-us/download/dotnet/6.0" class="link" target="_blank">.NET 6.0 Download</a></li>
-                        <li>Open Fishstrap settings</li>
-                        <li>Go to Deployment → Channel</li>
-                        <li>Set channel to <strong>LIVE</strong> (auto-changes to Production)</li>
-                    </ol>
-                </div>
-            </div>
-        </div>
-
-        <!-- Dependencies Section -->
-        <div id="dependencies" class="section">
-            <button class="back-btn" onclick="showMainMenu()">← Back to Menu</button>
-            <h2>📦 Dependencies & Complete Setup</h2>
-
-            <div class="problem">
-                <h3>📥 Required Dependencies (Install All)</h3>
-                <div class="solution">
-                    <h4>Essential Downloads with Direct Links:</h4>
-                    
-                    <div class="download-links">
-                        <div class="download-link">
-                            <strong>.NET SDK</strong><br>
-                            <a href="https://dotnet.microsoft.com/en-us/download/dotnet/9.0" class="link" target="_blank">SDK 9.0.302, Windows, Installers, x64</a>
-                        </div>
-                        <div class="download-link">
-                            <strong>.NET Framework</strong><br>
-                            <a href="https://dotnet.microsoft.com/en-us/download/dotnet-framework/net481" class="link" target="_blank">.NET Framework 4.8.1</a>
-                        </div>
-                        <div class="download-link">
-                            <strong>Visual C++ Redistributables</strong><br>
-                            <a href="https://aka.ms/vs/17/release/vc_redist.x64.exe" class="link" target="_blank">VC++ 2015-2022 x64</a><br>
-                            <a href="https://aka.ms/vs/17/release/vc_redist.x86.exe" class="link" target="_blank">VC++ 2015-2022 x86</a>
-                        </div>
-                        <div class="download-link">
-                            <strong>DirectX</strong><br>
-                            <a href="https://www.microsoft.com/en-us/download/details.aspx?id=35" class="link" target="_blank">DirectX End-User Runtime</a>
+                <div class="problem-content">
+                    <div class="solution-box">
+                        <h4>✓ DNS Configuration Method</h4>
+                        <ol class="step-list">
+                            <li>Change your DNS to either Cloudflare (1.1.1.1) or Google DNS (8.8.8.8)</li>
+                            <li>Visit <a href="https://developers.cloudflare.com/1.1.1.1/setup/windows/" class="link" target="_blank">Cloudflare DNS Setup</a> or <a href="https://developers.google.com/speed/public-dns/docs/using" class="link" target="_blank">Google DNS Setup</a></li>
+                            <li>Restart your network adapter or reboot your computer</li>
+                            <li>Clear browser cache and try accessing Work.Ink again</li>
+                        </ol>
+                        <div class="warning-box">
+                            <span class="icon">⚠️</span>
+                            <div>
+                                <strong>Still blocked?</strong>
+                                <p>Create a support ticket with your location and specific error message for additional help.</p>
+                            </div>
                         </div>
                     </div>
+                </div>
+            </div>
 
-                    <div class="warning">
-                        <strong>Critical:</strong> Restart your PC after installing ALL dependencies! This is not optional.
+            <div class="problem-card" onclick="toggleProblem(this)">
+                <div class="problem-header">
+                    <span class="problem-icon">❌</span>
+                    <div class="problem-title">
+                        <h3>"Go to Destination" Button Missing</h3>
+                        <p class="subtitle">Can't proceed through the download process</p>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="problem-content">
+                    <div class="solution-box">
+                        <h4>✓ Browser Configuration Fix</h4>
+                        <ol class="step-list">
+                            <li>Disable popup blockers in your browser settings</li>
+                            <li>Turn off all ad blockers (uBlock Origin, AdBlock Plus, etc.)</li>
+                            <li>Add Work.Ink to your browser's whitelist</li>
+                            <li>Clear browser cache and cookies completely</li>
+                            <li>Refresh the page and try again</li>
+                        </ol>
                     </div>
                 </div>
             </div>
 
-            <div class="problem">
-                <h3>🔧 Current Velocity Files (Latest Versions)</h3>
-                <div class="solution">
-                    <h4>Essential Components (Get from Support Channels):</h4>
-                    <ol class="step-list">
-                        <li><strong>Workspace (folder)</strong> (9.44 MB) - Critical for UI functionality</li>
-                        <li><strong>Bin</strong> (8.95 MB) - Injection component</li>
-                        <li><strong>VelocityAPI.dll</strong> (10.50 KB) - Main API library</li>
-                        <li><strong>Runtimes</strong> (10.50 KB) - Important!</li>
-                        <li><strong>assets</strong> (10.50 KB) -  also important xd!</li>
-                        <li>Place all files in your Velocity Bin folder</li>
-                        <li>Replace any existing versions with these current files</li>
-                    </ol>
-                    <div class="warning">
-                        These files are typically provided in official support channels and may be reposted with each Velocity update.
+            <div class="problem-card" onclick="toggleProblem(this)">
+                <div class="problem-header">
+                    <span class="problem-icon">🔍</span>
+                    <div class="problem-title">
+                        <h3>Error 404 - Page Not Found</h3>
+                        <p class="subtitle">Work.Ink website won't load</p>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="problem-content">
+                    <div class="solution-box">
+                        <h4>✓ Network & Connection Fix</h4>
+                        <ol class="step-list">
+                            <li>Completely disable any active VPNs</li>
+                            <li>Turn off proxy connections in browser settings</li>
+                            <li>Clear all browser data (cache, cookies, history)</li>
+                            <li>Try accessing from a different network (mobile hotspot)</li>
+                            <li>Flush DNS cache: Open CMD as admin and run:
+                                <div class="code-block">ipconfig /flushdns</div>
+                            </li>
+                            <li>Restart your router and modem</li>
+                        </ol>
                     </div>
                 </div>
             </div>
 
-            <div class="problem">
-                <h3>🛡️ Complete Antivirus Configuration</h3>
-                <div class="solution">
-                    <h4>Windows Defender Settings:</h4>
-                    <ol class="step-list">
-                        <li>Open Windows Security (Windows key + I → Privacy & Security → Windows Security)</li>
-                        <li>Go to Virus & threat protection</li>
-                        <li>Turn OFF Real-time protection</li>
-                        <li>Click "Manage settings" under Virus & threat protection settings</li>
-                        <li>Add exclusion → Folder → Select your entire Velocity folder</li>
-                        <li>Go to Device Security → Core isolation details</li>
-                        <li>Turn OFF Memory integrity</li>
-                    </ol>
-
-                    <h4>Third-Party Antivirus (Avast, AVG, Kaspersky, etc.):</h4>
-                    <ol class="step-list">
-                        <li>Open your antivirus software</li>
-                        <li>Find Exclusions/Whitelist settings</li>
-                        <li>Add your entire Velocity folder to exclusions</li>
-                        <li>Add Velocity.exe as a trusted application</li>
-                        <li>Disable real-time scanning for gaming/performance modes</li>
-                    </ol>
-                </div>
-            </div>
-
-            <div class="problem">
-                <h3>📁 Correct Velocity Folder Structure</h3>
-                <div class="solution">
-                    <h4>Your Velocity folder should look like this:</h4>
-                    <div class="folder-structure">
-<span class="folder">Velocity/</span>
-├── <span class="folder">Workspace/</span>
-├── <span class="folder">Bin/</span>
-│   ├── <span class="folder">ace-builds/</span>
-│   ├── <span class="file">Decompiler.exe</span>
-│   ├── <span class="file">erto3e4rortoergn.exe</span>
-│   ├── <span class="file">Intro.wav</span>
-│   ├── <span class="file">VMProtectSDK64.dll</span>
-│   └── <span class="file">workspace.dll</span>
-├── <span class="folder">AutoExec/</span>
-├── <span class="folder">Scripts/</span>
-├── <span class="folder">runtimes/</span>
-├── <span class="folder">assets/</span>
-├── <span class="file">Velocity.exe</span>
-└── <span class="file">VelocityAPI.dll</span>
+            <div class="problem-card" onclick="toggleProblem(this)">
+                <div class="problem-header">
+                    <span class="problem-icon">🔄</span>
+                    <div class="problem-title">
+                        <h3>Opera Continuously Downloading at Final Page</h3>
+                        <p class="subtitle">Stuck in download loop on last step</p>
                     </div>
-                    <div class="warning">
-                        <strong>Important:</strong> If any folders or files are missing, re-extract Velocity with antivirus completely disabled. Missing files usually means antivirus interference.
-                    </div>
+                    <span class="toggle-icon">▼</span>
                 </div>
-            </div>
-
-            <div class="problem">
-                <h3>⚙️ Advanced System Configuration</h3>
-                <div class="solution">
-                    <h4>Performance & Compatibility Settings:</h4>
-                    <ol class="step-list">
-                        <li><strong>Disable Game Mode:</strong> Windows Settings → Gaming → Game Mode → OFF</li>
-                        <li><strong>High Performance Power Plan:</strong> Control Panel → Power Options → High Performance</li>
-                        <li><strong>Graphics Settings:</strong> Windows Settings → Gaming → Graphics → Add Velocity.exe → High Performance</li>
-                        <li><strong>DEP Exception:</strong> Control Panel → System → Advanced → Performance Settings → Data Execution Prevention → Add Velocity.exe exception</li>
-                        <li><strong>Firewall Exception:</strong> Windows Firewall → Allow an app → Add Velocity.exe</li>
-                    </ol>
+                <div class="problem-content">
+                    <div class="solution-box">
+                        <h4>✓ Complete Browser Solution</h4>
+                        <ol class="step-list">
+                            <li>Disable all VPNs and proxy connections</li>
+                            <li>Turn off ad blockers completely</li>
+                            <li>Switch to Google Chrome (highly recommended)</li>
+                            <li>Use incognito/private browsing mode</li>
+                            <li>Clear all browser data</li>
+                            <li>Temporarily disable all browser extensions</li>
+                            <li>Try a different browser (Firefox or Edge)</li>
+                        </ol>
+                        <div class="warning-box">
+                            <span class="icon">✓</span>
+                            <div>
+                                <strong>Final Step</strong>
+                                <p>You'll be redirected to a GoFile link. Download the net8.0-windows.7z file from there.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="footer">
-            <h3>🔮 Made by Crypted</h3>
-            <p>Complete troubleshooting guide for Velocity executor and Work.Ink website issues</p>
-            <p style="margin-top: 15px; font-size: 0.95rem; opacity: 0.8;">Last updated: August 2025 • Comprehensive solutions with direct download links</p>
-            <p style="margin-top: 10px; font-size: 0.85rem; opacity: 0.6;">Always ensure you're downloading from official sources and keep your antivirus exclusions updated</p>
+        <!-- Velocity Problems -->
+        <div class="problems-section" id="velocity">
+            <div class="back-nav">
+                <button class="back-button" onclick="backToCategories()">← Back</button>
+                <h2>⚡ Velocity Executor Issues</h2>
+            </div>
+
+            <div class="problem-card" onclick="toggleProblem(this)">
+                <div class="problem-header">
+                    <span class="problem-icon">💥</span>
+                    <div class="problem-title">
+                        <h3>Roblox Crashing on Injection</h3>
+                        <p class="subtitle">Game crashes when injecting Velocity</p>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="problem-content">
+                    <div class="solution-box">
+                        <h4>✓ Alternative Roblox Versions</h4>
+                        <ol class="step-list">
+                            <li>Try <strong>Bloxstrap</strong> - Set channel to LIVE/Production in settings</li>
+                            <li>Try <strong>Fishstrap</strong> - Set deployment channel to LIVE</li>
+                            <li>Use standard Roblox from <a href="https://www.roblox.com/download" class="link" target="_blank">official website</a></li>
+                            <li>Download working build: <a href="https://rdd.weao.xyz/?channel=LIVE&binaryType=WindowsPlayer&version=version-2a06298afe3947ab" class="link" target="_blank">WEAO Roblox Player</a></li>
+                            <li>Ensure Roblox is fully loaded into a game before injecting</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-card" onclick="toggleProblem(this)">
+                <div class="problem-header">
+                    <span class="problem-icon">📜</span>
+                    <div class="problem-title">
+                        <h3>Scripts Not Executing</h3>
+                        <p class="subtitle">Code runs but nothing happens in game</p>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="problem-content">
+                    <div class="solution-box">
+                        <h4>✓ UI & Script Fix</h4>
+                        <ol class="step-list">
+                            <li>Open a new tab in the Velocity UI</li>
+                            <li>Try executing scripts in the new tab</li>
+                            <li>Test with simple scripts like Infinite Yield first</li>
+                            <li>Verify it's not a script-specific issue</li>
+                            <li>Ensure VelocityAPI.dll is in the same folder as Velocity.exe</li>
+                            <li>Restart both Velocity and Roblox</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-card" onclick="toggleProblem(this)">
+                <div class="problem-header">
+                    <span class="problem-icon">🖥️</span>
+                    <div class="problem-title">
+                        <h3>UI Not Opening / Missing Files</h3>
+                        <p class="subtitle">Velocity won't start or files are missing</p>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="problem-content">
+                    <div class="solution-box">
+                        <h4>✓ Required Files Check</h4>
+                        <p>Ensure these files are in your Bin folder:</p>
+                        <ol class="step-list">
+                            <li><code>Workspace</code> folder</li>
+                            <li><code>Bin</code> folder (Critical!)</li>
+                            <li><code>Velocity</code></li>
+                            <li><code>VelocityAPI.dll</code></li>
+                            <li><code>Runtimes</code></li>
+                            <li><code>assets</code></li>
+                        </ol>
+                        <div class="warning-box">
+                            <span class="icon">⚠️</span>
+                            <div>
+                                <strong>Important</strong>
+                                <p>If files are missing, your antivirus likely deleted them. Disable antivirus, re-extract Velocity, and add folder to exclusions.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-card" onclick="toggleProblem(this)">
+                <div class="problem-header">
+                    <span class="problem-icon">⚫</span>
+                    <div class="problem-title">
+                        <h3>Black Screen on Injection</h3>
+                        <p class="subtitle">Screen goes black after injecting</p>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="problem-content">
+                    <div class="solution-box">
+                        <h4>✓ OpenGL & Optimization Fix</h4>
+                        <ol class="step-list">
+                            <li>Install OpenGL drivers: <a href="https://www.majorgeeks.com/files/details/glsetup.html" class="link" target="_blank">GLSetup Download</a></li>
+                            <li>Disable full-screen optimizations for Roblox:
+                                <ul style="margin: 1rem 0; padding-left: 1.5rem; color: var(--text-muted);">
+                                    <li>Right-click RobloxPlayerBeta.exe → Properties</li>
+                                    <li>Go to Compatibility tab</li>
+                                    <li>Check "Disable fullscreen optimizations"</li>
+                                    <li>Apply and restart Roblox</li>
+                                </ul>
+                            </li>
+                            <li>Video guide: <a href="https://www.youtube.com/watch?v=TqCfBjOjZiI" class="link" target="_blank">Full Tutorial</a></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-card" onclick="toggleProblem(this)">
+                <div class="problem-header">
+                    <span class="problem-icon">💻</span>
+                    <div class="problem-title">
+                        <h3>Complete Setup Checklist</h3>
+                        <p class="subtitle">Everything you need configured</p>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="problem-content">
+                    <div class="solution-box">
+                        <h4>✓ Essential Requirements (In Order)</h4>
+                        <ol class="step-list">
+                            <li><strong>Roblox Version:</strong> Latest desktop version (NOT Microsoft Store)</li>
+                            <li><strong>Required Build:</strong> version-7b14ca0aa83149fa or newer</li>
+                            <li><strong>Admin Rights:</strong> Run both Roblox and Velocity as administrator</li>
+                            <li><strong>Windows Security:</strong> Turn off real-time protection, add exclusions</li>
+                            <li><strong>Dependencies:</strong> Visual C++ 2015-2022, .NET Framework 4.8+</li>
+                            <li><strong>Disable:</strong> Core Isolation, Memory Integrity, third-party antivirus</li>
+                            <li><strong>Overlays:</strong> Disable Discord, MSI Afterburner, GeForce overlays</li>
+                            <li><strong>File Check:</strong> Ensure VelocityAPI.dll is in same folder</li>
+                            <li><strong>Final Step:</strong> Restart PC after all changes</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+
+        <!-- Roblox Problems -->
+        <div class="problems-section" id="roblox">
+            <div class="back-nav">
+                <button class="back-button" onclick="backToCategories()">← Back</button>
+                <h2>🎮 Roblox-Specific Fixes</h2>
+            </div>
+
+            <div class="problem-card" onclick="toggleProblem(this)">
+                <div class="problem-header">
+                    <span class="problem-icon">🗑️</span>
+                    <div class="problem-title">
+                        <h3>Clear Roblox Cache & Corrupted Files</h3>
+                        <p class="subtitle">Remove corrupted game data</p>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="problem-content">
+                    <div class="solution-box">
+                        <h4>✓ Complete AppData Cleanup</h4>
+                        <ol class="step-list">
+                            <li>Press <span style="background: var(--bg-dark); padding: 0.2rem 0.5rem; border-radius: 4px;">Win + R</span>, type <span style="background: var(--bg-dark); padding: 0.2rem 0.5rem; border-radius: 4px;">%LocalAppData%\Roblox</span></li>
+                            <li>Delete the <strong>Versions</strong> folder completely</li>
+                            <li>Delete the <strong>Downloads</strong> folder</li>
+                            <li>Delete the <strong>ClientSettings</strong> folder</li>
+                            <li>Delete the <strong>LocalStorage</strong> folder if present</li>
+                        </ol>
+                    </div>
+                    <div class="solution-box">
+                        <h4>✓ Temp Cache Cleanup</h4>
+                        <ol class="step-list">
+                            <li>Press <span style="background: var(--bg-dark); padding: 0.2rem 0.5rem; border-radius: 4px;">Win + R</span>, type <span style="background: var(--bg-dark); padding: 0.2rem 0.5rem; border-radius: 4px;">%Temp%\Roblox</span></li>
+                            <li>Select all files (Ctrl + A) and delete everything</li>
+                            <li>Empty your Recycle Bin</li>
+                        </ol>
+                        <div class="warning-box">
+                            <span class="icon">✓</span>
+                            <div>
+                                <strong>After clearing cache</strong>
+                                <p>Download regular Roblox from <a href="https://www.roblox.com/download" class="link" target="_blank">roblox.com/download</a> - NOT Microsoft Store!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-card" onclick="toggleProblem(this)">
+                <div class="problem-header">
+                    <span class="problem-icon">📊</span>
+                    <div class="problem-title">
+                        <h3>Crash Dump Analysis</h3>
+                        <p class="subtitle">For persistent crash issues</p>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="problem-content">
+                    <div class="solution-box">
+                        <h4>✓ If Roblox Still Crashes After All Fixes</h4>
+                        <ol class="step-list">
+                            <li>Press <span style="background: var(--bg-dark); padding: 0.2rem 0.5rem; border-radius: 4px;">Win + R</span>, type <span style="background: var(--bg-dark); padding: 0.2rem 0.5rem; border-radius: 4px;">%localappdata%</span></li>
+                            <li>Open the <strong>CrashDumps</strong> folder</li>
+                            <li>Find recent crash dump files:
+                                <div class="code-block">Velocity.exe.dmp
+RobloxPlayerBeta.exe.dmp</div>
+                            </li>
+                            <li>Share these files when creating a support ticket</li>
+                            <li>Include system specs and exact error messages</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-card" onclick="toggleProblem(this)">
+                <div class="problem-header">
+                    <span class="problem-icon">🔧</span>
+                    <div class="problem-title">
+                        <h3>Complete Roblox Reinstall</h3>
+                        <p class="subtitle">Nuclear option for persistent issues</p>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="problem-content">
+                    <div class="solution-box">
+                        <h4>✓ Remove All Roblox-Related Files</h4>
+                        <ol class="step-list">
+                            <li>Press <span style="background: var(--bg-dark); padding: 0.2rem 0.5rem; border-radius: 4px;">Win + R</span>, type <span style="background: var(--bg-dark); padding: 0.2rem 0.5rem; border-radius: 4px;">%localappdata%</span></li>
+                            <li>Delete these folders completely:
+                                <ul style="margin: 1rem 0; padding-left: 1.5rem; color: var(--text-muted);">
+                                    <li><strong>Roblox</strong> (main folder)</li>
+                                    <li><strong>Bloxstrap</strong> (if using)</li>
+                                    <li><strong>Fishstrap</strong> (if using)</li>
+                                </ul>
+                            </li>
+                            <li>Uninstall Roblox from Control Panel</li>
+                            <li>Clear browser cache and cookies</li>
+                            <li>Restart your computer completely</li>
+                            <li>Download fresh Roblox from <a href="https://www.roblox.com/download" class="link" target="_blank">official website</a></li>
+                            <li>Install as administrator</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-card" onclick="toggleProblem(this)">
+                <div class="problem-header">
+                    <span class="problem-icon">🔄</span>
+                    <div class="problem-title">
+                        <h3>Alternative Roblox Clients</h3>
+                        <p class="subtitle">Try different Roblox versions</p>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="problem-content">
+                    <div class="solution-box">
+                        <h4>✓ Option 1: WEAO Roblox (Recommended)</h4>
+                        <ol class="step-list">
+                            <li>Go to <a href="https://rdd.weao.xyz" class="link" target="_blank">rdd.weao.xyz</a></li>
+                            <li>Click "Download Latest Version"</li>
+                            <li>Extract the downloaded folder</li>
+                            <li>Use RobloxPlayerBeta.exe as your client</li>
+                        </ol>
+                    </div>
+                    <div class="solution-box">
+                        <h4>✓ Option 2: Fishstrap Setup</h4>
+                        <ol class="step-list">
+                            <li>Download Fishstrap (may require .NET 6.0 Desktop Runtime)</li>
+                            <li>Install .NET 6.0 if prompted: <a href="https://dotnet.microsoft.com/en-us/download/dotnet/6.0" class="link" target="_blank">.NET 6.0 Download</a></li>
+                            <li>Open Fishstrap settings</li>
+                            <li>Go to Deployment → Channel</li>
+                            <li>Set channel to <strong>LIVE</strong></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dependencies Problems -->
+        <div class="problems-section" id="dependencies">
+            <div class="back-nav">
+                <button class="back-button" onclick="backToCategories()">← Back</button>
+                <h2>📦 Dependencies & Setup</h2>
+            </div>
+
+            <div class="problem-card" onclick="toggleProblem(this)">
+                <div class="problem-header">
+                    <span class="problem-icon">📥</span>
+                    <div class="problem-title">
+                        <h3>Required Dependencies</h3>
+                        <p class="subtitle">Install all essential components</p>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="problem-content">
+                    <div class="solution-box">
+                        <h4>✓ Essential Downloads</h4>
+                        <div class="download-grid">
+                            <div class="download-card">
+                                <strong>.NET SDK</strong>
+                                <a href="https://dotnet.microsoft.com/en-us/download/dotnet/9.0" class="link" target="_blank">SDK 9.0 x64</a>
+                            </div>
+                            <div class="download-card">
+                                <strong>.NET Framework</strong>
+                                <a href="https://dotnet.microsoft.com/en-us/download/dotnet-framework/net481" class="link" target="_blank">Framework 4.8.1</a>
+                            </div>
+                            <div class="download-card">
+                                <strong>VC++ x64</strong>
+                                <a href="https://aka.ms/vs/17/release/vc_redist.x64.exe" class="link" target="_blank">2015-2022</a>
+                            </div>
+                            <div class="download-card">
+                                <strong>VC++ x86</strong>
+                                <a href="https://aka.ms/vs/17/release/vc_redist.x86.exe" class="link" target="_blank">2015-2022</a>
+                            </div>
+                            <div class="download-card">
+                                <strong>DirectX</strong>
+                                <a href="https://www.microsoft.com/en-us/download/details.aspx?id=35" class="link" target="_blank">End-User Runtime</a>
+                            </div>
+                        </div>
+                        <div class="warning-box">
+                            <span class="icon">🔄</span>
+                            <div>
+                                <strong>Critical Step</strong>
+                                <p>Restart your PC after installing ALL dependencies. This is mandatory!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-card" onclick="toggleProblem(this)">
+                <div class="problem-header">
+                    <span class="problem-icon">🔧</span>
+                    <div class="problem-title">
+                        <h3>Current Velocity Files</h3>
+                        <p class="subtitle">Latest component versions</p>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="problem-content">
+                    <div class="solution-box">
+                        <h4>✓ Essential Components</h4>
+                        <ol class="step-list">
+                            <li><strong>Workspace</strong> folder (9.44 MB) - UI functionality</li>
+                            <li><strong>Bin</strong> folder (8.95 MB) - Injection component</li>
+                            <li><strong>VelocityAPI.dll</strong> (10.50 KB) - Main API library</li>
+                            <li><strong>Runtimes</strong> (10.50 KB) - Required runtimes</li>
+                            <li><strong>assets</strong> (10.50 KB) - UI assets</li>
+                            <li>Place all files in your Velocity Bin folder</li>
+                            <li>Replace existing versions with current files</li>
+                        </ol>
+                        <div class="warning-box">
+                            <span class="icon">ℹ️</span>
+                            <div>
+                                <p>These files are provided in official support channels and updated with each Velocity release.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-card" onclick="toggleProblem(this)">
+                <div class="problem-header">
+                    <span class="problem-icon">🛡️</span>
+                    <div class="problem-title">
+                        <h3>Antivirus Configuration</h3>
+                        <p class="subtitle">Prevent file deletion</p>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="problem-content">
+                    <div class="solution-box">
+                        <h4>✓ Windows Defender Settings</h4>
+                        <ol class="step-list">
+                            <li>Open Windows Security (Win + I → Privacy & Security)</li>
+                            <li>Go to Virus & threat protection</li>
+                            <li>Turn OFF Real-time protection</li>
+                            <li>Click "Manage settings"</li>
+                            <li>Add exclusion → Folder → Select Velocity folder</li>
+                            <li>Go to Device Security → Core isolation</li>
+                            <li>Turn OFF Memory integrity</li>
+                        </ol>
+                    </div>
+                    <div class="solution-box">
+                        <h4>✓ Third-Party Antivirus</h4>
+                        <ol class="step-list">
+                            <li>Open your antivirus software</li>
+                            <li>Find Exclusions/Whitelist settings</li>
+                            <li>Add entire Velocity folder to exclusions</li>
+                            <li>Add Velocity.exe as trusted application</li>
+                            <li>Disable real-time scanning for gaming</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-card" onclick="toggleProblem(this)">
+                <div class="problem-header">
+                    <span class="problem-icon">📁</span>
+                    <div class="problem-title">
+                        <h3>Correct Folder Structure</h3>
+                        <p class="subtitle">Verify your installation</p>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="problem-content">
+                    <div class="solution-box">
+                        <h4>✓ Your Velocity folder should look like this:</h4>
+                        <div class="code-block" style="font-size: 0.85rem; line-height: 1.8;">Velocity/
+├── Workspace/
+├── Bin/
+│   ├── ace-builds/
+│   ├── Decompiler.exe
+│   ├── erto3e4rortoergn.exe
+│   ├── Intro.wav
+│   ├── VMProtectSDK64.dll
+│   └── workspace.dll
+├── AutoExec/
+├── Scripts/
+├── runtimes/
+├── assets/
+├── Velocity.exe
+└── VelocityAPI.dll</div>
+                        <div class="warning-box">
+                            <span class="icon">⚠️</span>
+                            <div>
+                                <strong>Missing files?</strong>
+                                <p>Re-extract Velocity with antivirus completely disabled. Missing files usually indicate antivirus interference.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-card" onclick="toggleProblem(this)">
+                <div class="problem-header">
+                    <span class="problem-icon">⚙️</span>
+                    <div class="problem-title">
+                        <h3>Advanced System Configuration</h3>
+                        <p class="subtitle">Optimize for best performance</p>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="problem-content">
+                    <div class="solution-box">
+                        <h4>✓ Performance & Compatibility</h4>
+                        <ol class="step-list">
+                            <li><strong>Disable Game Mode:</strong> Settings → Gaming → Game Mode → OFF</li>
+                            <li><strong>Power Plan:</strong> Control Panel → Power Options → High Performance</li>
+                            <li><strong>Graphics Settings:</strong> Settings → Gaming → Graphics → Add Velocity.exe → High Performance</li>
+                            <li><strong>DEP Exception:</strong> Control Panel → System → Advanced → Performance → DEP → Add Velocity.exe</li>
+                            <li><strong>Firewall:</strong> Windows Firewall → Allow an app → Add Velocity.exe</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <h3>🔮 Made by Crypted</h3>
+        <p>Complete troubleshooting guide for Velocity executor and Work.Ink website</p>
+        <p style="margin-top: 1rem; opacity: 0.7;">Last updated: November 2025</p>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem; opacity: 0.5;">Always download from official sources and keep exclusions updated</p>
+    </footer>
 
     <script>
-        function enterSite() {
-            const welcomeScreen = document.getElementById('welcomeScreen');
-            const mainContent = document.getElementById('mainContent');
-            
-            welcomeScreen.classList.add('hide');
-            
-            setTimeout(() => {
-                mainContent.classList.add('show');
-            }, 500);
+        function scrollToGuide() {
+            document.getElementById('guide').scrollIntoView({ behavior: 'smooth' });
         }
 
-        function showSection(sectionId) {
-            // Hide main menu
-            document.getElementById('main-menu').style.display = 'none';
+        function showCategory(category) {
+            // Hide category grid
+            document.getElementById('categoryGrid').style.display = 'none';
             
-            // Hide all sections
-            const sections = document.querySelectorAll('.section');
-            sections.forEach(section => {
+            // Hide all problem sections
+            document.querySelectorAll('.problems-section').forEach(section => {
                 section.classList.remove('active');
             });
             
-            // Show selected section with animation
+            // Show selected category
             setTimeout(() => {
-                document.getElementById(sectionId).classList.add('active');
+                document.getElementById(category).classList.add('active');
             }, 100);
         }
 
-        function showMainMenu() {
-            // Hide all sections
-            const sections = document.querySelectorAll('.section');
-            sections.forEach(section => {
+        function backToCategories() {
+            // Hide all problem sections
+            document.querySelectorAll('.problems-section').forEach(section => {
                 section.classList.remove('active');
             });
             
-            // Show main menu with delay for smooth transition
+            // Show category grid
             setTimeout(() => {
-                document.getElementById('main-menu').style.display = 'grid';
-            }, 200);
+                document.getElementById('categoryGrid').style.display = 'grid';
+                document.getElementById('guide').scrollIntoView({ behavior: 'smooth' });
+            }, 100);
         }
 
-        // Add smooth scrolling for anchor links
-        document.addEventListener('DOMContentLoaded', function() {
-            const links = document.querySelectorAll('a[href^="#"]');
-            links.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({ 
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                });
+        function toggleProblem(card) {
+            const isExpanded = card.classList.contains('expanded');
+            
+            // Close all other cards
+            document.querySelectorAll('.problem-card').forEach(c => {
+                if (c !== card) {
+                    c.classList.remove('expanded');
+                }
             });
+            
+            // Toggle current card
+            if (isExpanded) {
+                card.classList.remove('expanded');
+            } else {
+                card.classList.add('expanded');
+            }
+        }
 
-            // Add loading animation for external links
-            const externalLinks = document.querySelectorAll('a[target="_blank"]');
-            externalLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    this.style.opacity = '0.7';
-                    setTimeout(() => {
-                        this.style.opacity = '1';
-                    }, 200);
-                });
+        // Search functionality
+        document.getElementById('searchBox').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const problemCards = document.querySelectorAll('.problem-card');
+            
+            problemCards.forEach(card => {
+                const title = card.querySelector('.problem-title h3').textContent.toLowerCase();
+                const subtitle = card.querySelector('.subtitle').textContent.toLowerCase();
+                const content = card.querySelector('.problem-content').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || subtitle.includes(searchTerm) || content.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
             });
         });
 
-        // Add keyboard navigation
+        // Keyboard shortcuts
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
-                showMainMenu();
+                backToCategories();
             }
         });
 
-        // Add scroll-to-top functionality
-        window.addEventListener('scroll', function() {
-            if (window.scrollY > 300) {
-                document.body.style.cursor = 'pointer';
-            } else {
-                document.body.style.cursor = 'default';
-            }
+        // Smooth scroll for all page navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add animation on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -100px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.problem-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'all 0.6s ease';
+                observer.observe(card);
+            });
         });
     </script>
 </body>
